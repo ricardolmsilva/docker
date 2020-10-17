@@ -57,13 +57,13 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      device: /home/deploy/docker/client
+      device: /home/deploy/docker/docker/client
       o: bind
   dhparam:
     driver: local
     driver_opts:
       type: none
-      device: /home/deploy/docker/dhparam/
+      device: /home/deploy/docker/docker/dhparam/
       o: bind
 
 networks:
