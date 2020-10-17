@@ -11,15 +11,15 @@ services:
     networks:
       - app-network
 
-  # api:
-  #   build:
-  #     context: api
-  #     dockerfile: Dockerfile
-  #   image: api
-  #   container_name: api
-  #   restart: unless-stopped
-  #   networks:
-  #     - app-network
+  api:
+    build:
+      context: api
+      dockerfile: Dockerfile
+    image: api
+    container_name: api
+    restart: unless-stopped
+    networks:
+      - app-network
 
   webserver:
     image: nginx:mainline-alpine
