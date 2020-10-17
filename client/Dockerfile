@@ -13,7 +13,7 @@ COPY package*.json ./
 
 USER node
 
-RUN npm install
+RUN yarn
 
 COPY --chown=node:node . .
 
@@ -21,4 +21,4 @@ COPY --chown=node:node . .
 EXPOSE 3000
 
 # Running the app
-CMD [ "npm", "run", "dev"]
+CMD [ "yarn", "dev"]

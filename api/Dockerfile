@@ -13,10 +13,10 @@ COPY package*.json ./
 
 USER node
 
-RUN npm install
+RUN yarn
 
 COPY --chown=node:node . .
 
 EXPOSE 1337
 
-CMD [ "npm", "run", "develop"]
+CMD [ "yarn", "develop"]
