@@ -1,0 +1,71 @@
+version: "3"
+
+services:
+  client:
+    build:
+      context: client
+      dockerfile: Dockerfile
+    image: client
+    container_name: client
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  api:
+    build:
+      context: api
+      dockerfile: Dockerfile
+    image: api
+    container_name: api
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  webserver:
+    image: nginx:mainline-alpine
+    container_name: webserver
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - web-root:/var/www/html
+      - ./nginx-conf:/etc/nginx/conf.d
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - dhparam:/etc/ssl/certs
+    depends_on:
+      - client
+    networks:
+      - app-network
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    volumes:
+      - certbot-etc:/etc/letsencrypt
+      - certbot-var:/var/lib/letsencrypt
+      - web-root:/var/www/html
+    depends_on:
+      - webserver
+    command: certonly --webroot --webroot-path=/var/www/html --email ricardolmsilva@outlook.com --agree-tos --no-eff-email --force-renewal -d nextjs.ricardolmsilva.site -d www.nextjs.ricardolmsilva.site
+
+volumes:
+  certbot-etc:
+  certbot-var:
+  web-root:
+    driver: local
+    driver_opts:
+      type: none
+      device: /Users/ricardosilva/Desktop/node_project/client
+      o: bind
+  dhparam:
+    driver: local
+    driver_opts:
+      type: none
+      device: /Users/ricardosilva/Desktop/node_project/docker/dhparam/
+      o: bind
+
+networks:
+  app-network:
+    driver: bridge
